@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import {
   ChevronDown,
   ChevronRight,
@@ -12,7 +11,6 @@ import {
   MessageSquare,
   FolderOpen,
   Sparkles,
-  LogOut,
   User,
 } from "lucide-react";
 import { useProjectStore } from "@/stores/projectStore";
@@ -33,7 +31,6 @@ export function Sidebar() {
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
   const [addingRoom, setAddingRoom] = useState<string | null>(null);
   const [newRoomName, setNewRoomName] = useState("");
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const toggleProject = (id: string) => {
     setExpandedProjects((p) => ({ ...p, [id]: !p[id] }));
@@ -156,32 +153,14 @@ export function Sidebar() {
 
       {/* Footer */}
       <div className="px-3 py-3 border-t border-white/10">
-        <div className="relative">
-          <button
-            onClick={() => setShowUserMenu(!showUserMenu)}
-            className="w-full flex items-center gap-2 hover:bg-sidebar-hover rounded-md p-1.5 transition-colors"
-          >
-            <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold">
-              <User className="w-4 h-4" />
-            </div>
-            <div className="flex-1 min-w-0 text-left">
-              <p className="text-xs font-medium text-sidebar-text-active truncate">User</p>
-              <p className="text-[10px] text-sidebar-text truncate">Click to logout</p>
-            </div>
-          </button>
-          {showUserMenu && (
-            <div className="absolute bottom-full left-0 right-0 mb-2 bg-sidebar-bg border border-white/10 rounded-md shadow-lg overflow-hidden">
-              <button
-                onClick={async () => {
-                  await signOut({ redirect: true, callbackUrl: "/api/auth/exchange" });
-                }}
-                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-sidebar-text hover:bg-sidebar-hover hover:text-sidebar-text-active transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          )}
+        <div className="flex items-center gap-2 p-1.5">
+          <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center text-white text-xs font-bold">
+            <User className="w-4 h-4" />
+          </div>
+          <div className="flex-1 min-w-0 text-left">
+            <p className="text-xs font-medium text-sidebar-text-active truncate">Guest</p>
+            <p className="text-[10px] text-sidebar-text truncate">Auth disabled</p>
+          </div>
         </div>
       </div>
     </aside>

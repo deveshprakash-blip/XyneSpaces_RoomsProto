@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./auth";
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -51,11 +50,11 @@ export function errorResponse(
 }
 
 export async function requireAuth(request?: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    throw new Error("UNAUTHORIZED");
-  }
-  return session;
+  // Auth removed: return a guest session so APIs still run (no real user)
+  return {
+    user: { id: "guest", email: null, name: "Guest" },
+    expires: "",
+  };
 }
 
 export function handleApiError(error: unknown): NextResponse<ApiResponse> {
